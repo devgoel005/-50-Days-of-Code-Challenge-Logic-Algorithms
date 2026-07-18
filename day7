@@ -1,0 +1,106 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+class Node {
+public:
+    int data;
+    Node* next;
+
+    Node(int x) {
+        data = x;
+        next = NULL;
+    }
+};
+
+Node* segregateOddEven(Node* head) {
+    if (head == NULL || head->next == NULL)
+        return head;
+
+    Node *oddHead = NULL, *oddTail = NULL;
+    Node *evenHead = NULL, *evenTail = NULL;
+
+    Node* curr = head;
+
+    while (curr != NULL) {
+        if (curr->data % 2 != 0) {   // Odd value
+            if (oddHead == NULL) {
+                oddHead = oddTail = curr;
+            } else {
+                oddTail->next = curr;
+                oddTail = curr;
+            }
+        } else {                     // Even value
+            if (evenHead == NULL) {
+                evenHead = evenTail = curr;
+            } else {
+                evenTail->next = curr;
+                evenTail = curr;
+            }
+        }
+        curr = curr->next;
+    }
+
+    // If no odd nodes
+    if (oddHead == NULL) {
+        evenTail->next = NULL;
+        return evenHead;
+    }
+
+    // If no even nodes
+    if (evenHead == NULL) {
+        oddTail->next = NULL;
+        return oddHead;
+    }
+
+    oddTail->next = evenHead;
+    evenTail->next = NULL;
+
+    return oddHead;
+}
+
+void print(Node* head){
+    Node*temp=head;
+    while(temp!= NULL)
+    {
+        cout<<(*temp).data<<"  ";
+        temp=(*temp).next;
+    }
+    cout<<" ";
+}
+
+
+void insertval(Node*&head, Node*&tail,int val){
+    Node* newnode= new Node(val);
+
+    if(head==NULL){
+        head=newnode;
+        tail=newnode;
+        return;
+    }
+    (*tail).next=newnode;
+    tail=newnode;
+
+}
+
+
+int main(){
+    int n;
+    //cout<<"Enter size of the Linked List ";
+    cin>>n;
+    if(0<n && n<10^9){
+    Node*head=NULL;
+    Node*tail=NULL;
+    int key;
+    for(int i=0;i<n;i++){
+        int val;
+        cin>>val;
+        insertval(head,tail,val);
+    }
+    //print(head);
+    cout<<endl;
+    Node *final= segregateOddEven(head);
+    print(final);
+
+    return 0;
+}
+}
